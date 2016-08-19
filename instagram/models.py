@@ -104,9 +104,11 @@ class Media(ApiModel):
                 new_media.comments.append(Comment.object_from_dictionary(comment))
 
         new_media.users_in_photo = []
-        if 'users_in_photo' in entry:
-            for user_in_photo in entry['users_in_photo']:
-                new_media.users_in_photo.append(UserInPhoto.object_from_dictionary(user_in_photo))
+        try:
+            users_in_photo = [x for x in entry['users_in_photo']]
+        except:
+            users_in_photo = []
+        new_media.users_in_photo = [UserInPhoto.object_from_dictionary(user_in_photo) for user_in_photo in users_in_photo]
 
         try:
             new_media.created_time = timestamp_to_datetime(entry['created_time'])
